@@ -1,31 +1,75 @@
-async function uploadToGitHub(fileName, fileContent) {
-    const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/uploads/${fileName}`;
-    
-    try {
-        const response = await fetch(url, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `token ${GITHUB_TOKEN}`,
-                'Content-Type': 'application/json',
-                'Accept': 'application/vnd.github.v3+json'
-            },
-            body: JSON.stringify({
-                message: `Upload ${fileName}`,
-                content: fileContent,
-                branch: 'main' // Especificar branch
-            })
-        });
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload de Arquivos no GitHub2</title>
+</head>
+<body>
+    <input type="file" id="fileInput" multiple>
+    <button onclick="uploadFiles()">Enviar Arquivos</button>
 
-        const responseData = await response.json();
+    <script>
+        const GITHUB_TOKEN = 'SEU_TOKEN';
+        const REPO_OWNER = 'lbc1989';
+        const REPO_NAME = 'lbc1989-lagopojecao';
 
-        if (!response.ok) {
-            console.error('Detalhes do erro:', responseData);
-            throw new Error(`Falha no upload: ${responseData.message}`);
+        // Transforme a função em async
+        async function uploadFiles() {
+            const fileInput = document.getElementById('fileInput');
+            const files = fileInput.files;
+
+            for (let file of files) {
+                try {
+                    const base64File = await toBase64(file);
+                    await uploadToGitHub(`uploads/${file.name}`, base64File);
+                    alert(`${file.name} enviado com sucesso!`);
+                } catch (error) {
+                    console.error('Erro no upload:', error);
+                    alert(`Erro ao enviar ${file.name}: ${error.message}`);
+                }
+            }
         }
 
-        return responseData;
-    } catch (error) {
-        console.error('Erro completo:', error);
-        throw error;
-    }
-}
+        function toBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result.split(',')[1]);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        async function uploadToGitHub(fileName, fileContent) {
+            const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${fileName}`;
+            
+            try {
+                const response = await fetch(url, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/vnd.github.v3+json'
+                    },
+                    body: JSON.stringify({
+                        message: `Upload ${fileName}`,
+                        content: fileContent,
+                        branch: 'main'
+                    })
+                });
+
+                const responseData = await response.json();
+
+                if (!response.ok) {
+                    console.error('Detalhes do erro:', responseData);
+                    throw new Error(`Falha no upload: ${responseData.message}`);
+                }
+
+                return responseData;
+            } catch (error) {
+                console.error('Erro completo:', error);
+                throw error;
+            }
+        }
+    </script>
+</body>
+</html>
