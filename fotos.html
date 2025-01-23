@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload de Arquivos no GitHub</title>
+</head>
+<body>
+    <input type="file" id="fileInput" multiple>
+    <button onclick="uploadFiles()">Enviar Arquivos</button>
+
+    <script>
+        // TOKEN DE ACESSO PESSOAL DO GITHUB
+        const GITHUB_TOKEN = 'SEU_TOKEN_AQUI';
+        const REPO_OWNER = 'SEU_USUARIO';
+        const REPO_NAME = 'NOME_DO_REPOSITORIO';
+
+        async function uploadFiles() {
+            const fileInput = document.getElementById('fileInput');
+            const files = fileInput.files;
+
+            for (let file of files) {
+                try {
+                    const base64File = await toBase64(file);
+                    await uploadToGitHub(file.name, base64File);
+                    alert(`${file.name} enviado com sucesso!`);
+                } catch (error) {
+                    console.error('Erro no upload:', error);
+                    alert(`Erro ao enviar ${file.name}`);
+                }
+            }
+        }
+
+        function toBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result.split(',')[1]);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        async function uploadToGitHub(fileName, fileContent) {
+            const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${fileName}`;
+            
+            const response = await fetch(url, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${GITHUB_TOKEN}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: `Upload ${fileName}`,
+                    content: fileContent
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Falha no upload');
+            }
+
+            return response.json();
+        }
+    </script>
+</body>
+</html>
