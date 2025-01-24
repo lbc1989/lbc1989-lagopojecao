@@ -102,8 +102,8 @@ p, li {
 }
 
 .carousel-indicators button {
-    width: 12px;
-    height: 12px;
+    width: 15px !important;
+    height: 15px !important;
     border-radius: 50%;
     margin: 0 8px;
     background-color: #fff;
