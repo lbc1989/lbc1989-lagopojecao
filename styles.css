@@ -48,6 +48,27 @@ footer.bg-dark {
     background-color: var(--primary-color) !important;
     flex-shrink: 0;
 }
+footer {
+    background-color: var(--primary-color) !important;
+    flex-shrink: 0;
+}
+
+footer .btn-outline-light {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    line-height: 40px;
+}
+
+footer .btn-outline-light:hover {
+    background-color: #e74c3c;
+    border-color: #e74c3c;
+}
+
+footer .border-top {
+    border-color: rgba(255,255,255,0.1) !important;
+}
 /* Estilo do Carousel */
 .carousel-item img {
     height: 500px;
