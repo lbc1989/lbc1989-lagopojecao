@@ -2,56 +2,83 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Upload GitHub</title>
+    <title>Manual da Projeção</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <h1>Upload de Arquivos para GitHub 2</h1>
-    <input type="file" id="fileInput">
-    <button onclick="uploadFile()">Upload</button>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#" onclick="loadContent('inicio')">
+                <img src="img/logo.png" alt="Logo Manual da Projeção" height="30" class="d-inline-block align-text-top me-2">
+                Manual da Projeção
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="loadContent('inicio')">Início</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="loadContent('equipamentos')">Equipamentos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="loadContent('softwares')">Softwares</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="loadContent('problemas')">Problemas Conhecidos</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <main id="mainContent" class="container my-4">
+        <!-- O conteúdo será carregado aqui -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Contato</h5>
+                    <a href="https://wa.me/5513991632966" class="btn btn-outline-light">
+                        <i class="fab fa-whatsapp me-2"></i>WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <script>
-        async function uploadFile() {
-            const fileInput = document.getElementById('fileInput');
-            const file = fileInput.files[0];
+        function loadContent(page) {
+            const mainContent = document.getElementById('mainContent');
             
-            if (!file) {
-                alert('Por favor, selecione um arquivo');
-                return;
-            }
+            // Objeto com o conteúdo de cada página
+            const pages = {
+                inicio: `
+                    <h1>Bem-vindo ao Manual da Projeção</h1>
+                    <p>Conteúdo da página inicial...</p>
+                `,
+                equipamentos: `
+                    <h1>Equipamentos</h1>
+                    <p>Lista de equipamentos...</p>
+                `,
+                softwares: `
+                    <h1>Softwares</h1>
+                    <p>Lista de softwares...</p>
+                `,
+                problemas: `
+                    <h1>Problemas Conhecidos</h1>
+                    <p>Lista de problemas comuns...</p>
+                `
+            };
 
-            try {
-                // Lê o arquivo como ArrayBuffer
-                const buffer = await file.arrayBuffer();
-                // Converte para string base64
-                const base64Content = btoa(
-                    new Uint8Array(buffer)
-                        .reduce((data, byte) => data + String.fromCharCode(byte), '')
-                );
-
-                const response = await fetch('https://api.github.com/repos/lbc1989/lbc1989-lagopojecao/contents/' + file.name, {
-                    method: 'PUT',
-                    headers: {
-                        'Authorization': 'token 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',
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/vnd.github+json'
-                    },
-                    body: JSON.stringify({
-                        message: 'Upload via API',
-                        content: base64Content
-                    })
-                });
-
-                if (response.ok) {
-                    alert('Arquivo enviado com sucesso!');
-                } else {
-                    const error = await response.json();
-                    throw new Error(error.message);
-                }
-            } catch (error) {
-                console.error('Erro:', error);
-                alert('Erro ao enviar arquivo: ' + error.message);
-            }
+            // Carrega o conteúdo da página selecionada
+            mainContent.innerHTML = pages[page] || pages.inicio;
         }
+
+        // Carrega a página inicial quando o site abre
+        loadContent('inicio');
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
