@@ -13,9 +13,13 @@ body {
 .navbar {
     background-color: var(--primary-color);
 }
+.navbar img{
+    height: 100%;
+}
 
 .navbar-brand, .nav-link {
     color: var(--text-color) !important;
+    height: 3.75rem;
 }
 
 .nav-link:hover {
@@ -27,11 +31,11 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: bold; /* Títulos em negrito */
 }
 
-.container {
-    background-color: var(--background-color);
-}
-
 /* Ajuste para melhorar a legibilidade do texto em fundo preto */
 p, li {
     line-height: 1.6;
+}
+
+footer {
+     background-color: var(--primary-color);
 }
