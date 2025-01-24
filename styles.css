@@ -32,28 +32,54 @@ p, li {
 }
 
 /* Navbar */
+/* Navbar Específico */
 .navbar {
     background-color: rgba(34, 34, 34, 0.9);
-    position: fixed;
-    width: 100%;
-    top: 0;
-    z-index: 1030;
+    backdrop-filter: blur(10px);
     padding: 0.5rem 0;
+    transition: all 0.3s ease;
 }
 
-.navbar img {
+.navbar-logo {
     height: 40px;
+    transition: all 0.3s ease;
 }
 
-.navbar-brand, .nav-link {
-    color: var(--text-color) !important;
-    height: 3.75rem;
-    display: flex;
-    align-items: center;
+.nav-link {
+    position: relative;
+    padding: 1rem 1.5rem !important;
+    font-weight: 500;
+    transition: color 0.3s ease;
 }
 
-.nav-link:hover {
-    color: var(--accent-color) !important;
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: var(--accent-color);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.nav-link:hover::after {
+    width: 70%;
+}
+
+.navbar-nav {
+    gap: 0.5rem;
+}
+
+@media (max-width: 991.98px) {
+    .navbar-nav {
+        padding: 1rem 0;
+    }
+    
+    .nav-link {
+        padding: 0.5rem 1rem !important;
+    }
 }
 
 /* Carousel */
