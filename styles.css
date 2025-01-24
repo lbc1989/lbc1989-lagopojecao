@@ -36,6 +36,9 @@ p, li {
     line-height: 1.6;
 }
 
-footer {
-     background-color: var(--primary-color);
+footer.bg-dark {
+    background-color: var(--primary-color);
+    position: absolute;
+    width: 100%;
+    bottom: 0;
 }
