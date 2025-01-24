@@ -146,8 +146,7 @@ footer .btn-outline-light {
 }
 
 footer .btn-outline-light:hover {
-    background-color: var(--accent-color);
-    border-color: var(--accent-color);
+    background: none;
 }
 
 footer .border-top {
@@ -162,4 +161,7 @@ footer a {
 
 footer a:hover {
     color: var(--accent-color);
+}
+.fab:hover {
+    color: green;
 }
