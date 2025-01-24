@@ -59,7 +59,7 @@ p, li {
     left: 50%;
     width: 0;
     height: 2px;
-    background-color: var(--accent-color);
+    background-color: var(--text-color);
     transition: all 0.3s ease;
     transform: translateX(-50%);
 }
