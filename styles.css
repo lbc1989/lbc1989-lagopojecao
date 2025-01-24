@@ -81,6 +81,11 @@ p, li {
         padding: 0.5rem 1rem !important;
     }
 }
+@media (min-width: 992px) {
+    .navbar-expand-lg .navbar-nav {
+        padding-left: 50px;
+    }
+}
 
 /* Carousel */
 .carousel {
