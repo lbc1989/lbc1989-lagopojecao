@@ -2,64 +2,51 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Upload para Google Drive</title>
-    <script src="https://apis.google.com/js/api.js"></script>
+    <title>Upload GitHub</title>
 </head>
 <body>
-    <h1>Upload para Google Drive</h1>
-    <input type="file" id="fileInput" multiple>
-    <button onclick="uploadFiles()">Enviar Arquivos</button>
+    <h1>Upload de Arquivos para GitHub</h1>
+    <input type="file" id="fileInput">
+    <button onclick="uploadFile()">Upload</button>
 
     <script>
-        const CLIENT_ID = '502880291071-bnnac5n75ahv6ag6qjr4fhmesv8ceq07.apps.googleusercontent.com';
-        const API_KEY = 'AIzaSyDa5i5Kp3UqSpI17VTtdMvsVibKUj1JlXA';
-        const SCOPES = 'https://www.googleapis.com/auth/drive.file';
-
-        function handleClientLoad() {
-            gapi.load('client:auth2', initClient);
-        }
-
-        function initClient() {
-            gapi.client.init({
-                apiKey: API_KEY,
-                clientId: CLIENT_ID,
-                scope: SCOPES
-            }).then(() => {
-                console.log('Cliente inicializado');
-            });
-        }
-
-        async function uploadFiles() {
+        async function uploadFile() {
             const fileInput = document.getElementById('fileInput');
-            const files = fileInput.files;
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('Por favor, selecione um arquivo');
+                return;
+            }
 
-            for (let file of files) {
-                try {
-                    const metadata = {
-                        name: file.name,
-                        mimeType: file.type
-                    };
+            try {
+                // Converte o arquivo para base64
+                const content = await file.text();
+                const encodedContent = btoa(content);
 
-                    const formData = new FormData();
-                    formData.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
-                    formData.append('file', file);
+                const response = await fetch('https://api.github.com/repos/lbc1989/lbc1989-lagopojecao/contents/' + file.name, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': 'token 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',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: 'Upload via API',
+                        content: encodedContent
+                    })
+                });
 
-                    const response = await gapi.client.request({
-                        path: 'https://www.googleapis.com/upload/drive/v3/files',
-                        method: 'POST',
-                        body: formData
-                    });
-
-                    console.log('Arquivo enviado:', response);
-                    alert(`${file.name} enviado com sucesso!`);
-                } catch (error) {
-                    console.error('Erro no upload:', error);
-                    alert(`Erro ao enviar ${file.name}`);
+                if (response.ok) {
+                    alert('Arquivo enviado com sucesso!');
+                } else {
+                    const error = await response.json();
+                    throw new Error(error.message);
                 }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao enviar arquivo: ' + error.message);
             }
         }
-
-        gapi.load('client', initClient);
     </script>
 </body>
 </html>
