@@ -52,18 +52,6 @@ p, li {
     transition: color 0.3s ease;
 }
 
-.nav-link::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    width: 0;
-    height: 2px;
-    background-color: var(--text-color);
-    transition: all 0.3s ease;
-    transform: translateX(-50%);
-}
-
 .nav-link:hover::after {
     width: 70%;
 }
